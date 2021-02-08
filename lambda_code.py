@@ -35,7 +35,7 @@ def chuck_norris():
     response = requests.get("http://api.icndb.com/jokes/random")
     joke = response.json().get("value").get("joke")
     return {
-            "type": RESPONSE_TYPES['MESSAGE_NO_SOURCE'],
+            "type": 3,
             "data": {
                 "tts": False,
                 "content": joke,
