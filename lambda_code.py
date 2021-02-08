@@ -1,5 +1,6 @@
 import json
 import requests
+import wikipedia
 
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
@@ -58,6 +59,20 @@ def bitcoin():
     }
 
 
+def wiki(body):
+    term = body.get("data").get("options")[0].get("value")
+    result = wikipedia.summary(term.replace(" ", ""), sentences=1)
+    return {
+        "type": 3,
+        "data": {
+            "tts": False,
+            "content": result,
+            "embeds": [],
+            "allowed_mentions": []
+        }
+    }
+
+
 def lambda_handler(event, context):
     # verify the signature
     try:
@@ -75,3 +90,6 @@ def lambda_handler(event, context):
 
     if body.get("data").get("name") == "btc":
         return bitcoin()
+
+    if body.get("data").get("name") == "wikipedia":
+        return wiki(body)
