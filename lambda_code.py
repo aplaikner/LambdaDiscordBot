@@ -1,6 +1,7 @@
 import json
 import requests
 import wikipedia
+import wolframalpha
 
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
@@ -73,6 +74,22 @@ def wiki(body):
     }
 
 
+def wolfram(body):
+    term = body.get("data").get("options")[0].get("value")
+    app_id = "WTW2H7-RU27T97RER"
+    client = wolframalpha.Client(app_id)
+    res = client.query(term)
+    return {
+        "type": 3,
+        "data": {
+            "tts": False,
+            "content": next(res.results).text,
+            "embeds": [],
+            "allowed_mentions": []
+        }
+    }
+
+
 def lambda_handler(event, context):
     # verify the signature
     try:
@@ -93,3 +110,6 @@ def lambda_handler(event, context):
 
     if body.get("data").get("name") == "wikipedia":
         return wiki(body)
+
+    if body.get("data").get("name") == "wolfram":
+        return wolfram(body)
