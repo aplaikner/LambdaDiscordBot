@@ -2,6 +2,7 @@ import json
 import requests
 import wikipedia
 import wolframalpha
+import random
 import praw
 
 from nacl.signing import VerifyKey
@@ -97,36 +98,39 @@ def wolfram(body):
 
 def meme():
     subreddit = REDDIT.subreddit('DankMemes')
+    posts = subreddit.hot(limit=100)
 
     extensions = ['png', 'jpg', 'gif']
+    images = []
 
-    image = {
-        "url": "",
-        "title": "",
-        "link": ""
-    }
-
-    url = [""]
-
-    while url[len(url) - 1] not in extensions:
-        posts = subreddit.random_rising(limit=1)
-        post = None
-
-        for p in posts:
-            post = p
-
+    for post in posts:
         url = post.url.split(".")
 
-        image["url"] = post.url
-        image["title"] = post.title
-        image["link"] = "https://reddit.com" + post.permalink
+        if url[len(url) - 1] in extensions:
+            image = {
+                "url": post.url,
+                "title": post.title,
+                "link": "https://reddit.com" + post.permalink
+            }
+
+            images.append(image)
+
+    rand = random.randint(0, len(images) - 1)
+    image = images[rand]
 
     return {
         "type": RESPONSE_TYPES["MESSAGE_NO_SOURCE"],
         "data": {
             "tts": False,
-            "content": image["url"],
-            "embeds": [],
+            "content": "",
+            "embeds": [{
+                "color": 0x0099ff,
+                "title": image["title"],
+                "url": image["link"],
+                "image": {
+                    "url": image["url"],
+                }
+            }],
             "allowed_mentions": []
         }
     }
