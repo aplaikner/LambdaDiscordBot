@@ -35,14 +35,27 @@ def chuck_norris():
     response = requests.get("http://api.icndb.com/jokes/random")
     joke = response.json().get("value").get("joke")
     return {
-            "type": 3,
-            "data": {
-                "tts": False,
-                "content": joke,
-                "embeds": [],
-                "allowed_mentions": []
-            }
+        "type": 3,
+        "data": {
+            "tts": False,
+            "content": joke,
+            "embeds": [],
+            "allowed_mentions": []
         }
+    }
+
+
+def bitcoin():
+    response = requests.get("https://www.bitmex.com/api/v1/orderBook/L2?symbol=xbt&depth=1")
+    return {
+        "type": 3,
+        "data": {
+            "tts": False,
+            "content": str(response.json()[0]["price"]) + " USD",
+            "embeds": [],
+            "allowed_mentions": []
+        }
+    }
 
 
 def lambda_handler(event, context):
@@ -59,3 +72,6 @@ def lambda_handler(event, context):
 
     if body.get("data").get("name") == "chuck":
         return chuck_norris()
+
+    if body.get("data").get("name") == "btc":
+        return bitcoin()
