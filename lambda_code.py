@@ -7,7 +7,7 @@ import praw
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
-PUBLIC_KEY = 'a826dbc40ee095cef951f027d10a13f0f3518424e6775ea82637cfebc2fc18f9'  # found on Discord Application -> General Information page
+PUBLIC_KEY = 'a826dbc40ee095cef951f027d10a13f0f3518424e6775ea82637cfebc2fc18f9'
 PING_PONG = {"type": 1}
 RESPONSE_TYPES = {
     "PONG": 1,
@@ -28,7 +28,8 @@ def verify_signature(event):
 
     message = auth_ts.encode() + raw_body.encode()
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
-    verify_key.verify(message, bytes.fromhex(auth_sig))  # raises an error if unequal
+    # raises an error if unequal
+    verify_key.verify(message, bytes.fromhex(auth_sig))
 
 
 def ping_pong(body):
@@ -41,7 +42,7 @@ def chuck_norris():
     response = requests.get("http://api.icndb.com/jokes/random")
     joke = response.json().get("value").get("joke")
     return {
-        "type": 3,
+        "type": RESPONSE_TYPES["MESSAGE_NO_SOURCE"],
         "data": {
             "tts": False,
             "content": joke,
@@ -54,7 +55,7 @@ def chuck_norris():
 def bitcoin():
     response = requests.get("https://www.bitmex.com/api/v1/orderBook/L2?symbol=xbt&depth=1")
     return {
-        "type": 3,
+        "type": RESPONSE_TYPES["MESSAGE_NO_SOURCE"],
         "data": {
             "tts": False,
             "content": str(response.json()[0]["price"]) + " USD",
@@ -68,7 +69,7 @@ def wiki(body):
     term = body.get("data").get("options")[0].get("value")
     result = wikipedia.summary(term.replace(" ", ""), sentences=1)
     return {
-        "type": 3,
+        "type": RESPONSE_TYPES["MESSAGE_NO_SOURCE"],
         "data": {
             "tts": False,
             "content": result,
@@ -84,7 +85,7 @@ def wolfram(body):
     client = wolframalpha.Client(app_id)
     res = client.query(term)
     return {
-        "type": 3,
+        "type": RESPONSE_TYPES["MESSAGE_NO_SOURCE"],
         "data": {
             "tts": False,
             "content": next(res.results).text,
