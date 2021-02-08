@@ -2,6 +2,7 @@ import json
 import requests
 import wikipedia
 import wolframalpha
+import praw
 
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
@@ -15,6 +16,9 @@ RESPONSE_TYPES = {
     "MESSAGE_WITH_SOURCE": 4,
     "ACK_WITH_SOURCE": 5
 }
+REDDIT = praw.Reddit(client_id='AXF9ouKzaB9pmg',
+                     client_secret='9mXfWxduhdNt6FV3o_Bu7fX0MCFQ3w',
+                     user_agent='Jefferson')
 
 
 def verify_signature(event):
@@ -90,6 +94,43 @@ def wolfram(body):
     }
 
 
+def meme():
+    subreddit = REDDIT.subreddit('DankMemes')
+
+    extensions = ['png', 'jpg', 'gif']
+
+    image = {
+        "url": "",
+        "title": "",
+        "link": ""
+    }
+
+    url = [""]
+
+    while url[len(url) - 1] not in extensions:
+        posts = subreddit.random_rising(limit=1)
+        post = None
+
+        for p in posts:
+            post = p
+
+        url = post.url.split(".")
+
+        image["url"] = post.url
+        image["title"] = post.title
+        image["link"] = "https://reddit.com" + post.permalink
+
+    return {
+        "type": RESPONSE_TYPES["MESSAGE_NO_SOURCE"],
+        "data": {
+            "tts": False,
+            "content": image["url"],
+            "embeds": [],
+            "allowed_mentions": []
+        }
+    }
+
+
 def lambda_handler(event, context):
     # verify the signature
     try:
@@ -113,3 +154,6 @@ def lambda_handler(event, context):
 
     if body.get("data").get("name") == "wolfram":
         return wolfram(body)
+
+    if body.get("data").get("name") == "meme":
+        return meme()
