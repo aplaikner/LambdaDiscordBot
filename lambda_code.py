@@ -8,8 +8,11 @@ import praw
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
-PUBLIC_KEY = 'a826dbc40ee095cef951f027d10a13f0f3518424e6775ea82637cfebc2fc18f9'
+PUBLIC_KEY_DISCORD = 'a826dbc40ee095cef951f027d10a13f0f3518424e6775ea82637cfebc2fc18f9'
+PUBLIC_KEY_SERVER = "64fd9f9deda0129271cb035fdfe5501a79062c692436bf08bd63a99185b58ee2"
+
 PING_PONG = {"type": 1}
+
 RESPONSE_TYPES = {
     "PONG": 1,
     "ACK_NO_SOURCE": 2,
@@ -28,9 +31,13 @@ def verify_signature(event):
     auth_ts = event['params']['header'].get('x-signature-timestamp')
 
     message = auth_ts.encode() + raw_body.encode()
-    verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
+    verify_key_discord = VerifyKey(bytes.fromhex(PUBLIC_KEY_DISCORD))
+    verify_key_server = VerifyKey(bytes.fromhex(PUBLIC_KEY_SERVER))
     # raises an error if unequal
-    verify_key.verify(message, bytes.fromhex(auth_sig))
+    try:
+        verify_key_discord.verify(message, bytes.fromhex(auth_sig))
+    except BadSignatureError:
+        verify_key_server.verify(message, bytes.fromhex(auth_sig))
 
 
 def ping_pong(body):
