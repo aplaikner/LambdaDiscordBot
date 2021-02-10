@@ -20,9 +20,9 @@ RESPONSE_TYPES = {
     "MESSAGE_WITH_SOURCE": 4,
     "ACK_WITH_SOURCE": 5
 }
-REDDIT = praw.Reddit(client_id='AXF9ouKzaB9pmg',
-                     client_secret='9mXfWxduhdNt6FV3o_Bu7fX0MCFQ3w',
-                     user_agent='Jefferson')
+REDDIT = praw.Reddit(client_id='CLIENT_ID',
+                     client_secret='CLIENT_SECRET',
+                     user_agent='AGENT_NAME')
 
 
 def verify_signature(event):
@@ -167,5 +167,5 @@ def lambda_handler(event, context):
     if body.get("data").get("name") == "wolfram":
         return wolfram(body)
 
-    if body.get("data").get("name") == "meme":
+    if body.get("data").get("name") == "dank":
         return meme()
