@@ -27,9 +27,8 @@ def sendEvent(event, data):
 
     headers = create_signature(body)
 
-    response = requests.post(url, json=body, headers=headers)
+    response = requests.post(url, json=json.loads(body), headers=headers)
 
-    print(response)
     print(response.text)
 
 
