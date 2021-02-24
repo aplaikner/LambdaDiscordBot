@@ -169,7 +169,13 @@ def on_message(body):
             points = 50
             add_points(author_id, author_name, points)
 
-    return {}
+            return {"information": {
+                "user": author_name,
+                "id": author_id,
+                "points_added": points
+            }}
+
+    return {"status": "Did not get any points"}
 
 
 def on_reaction(body, add):
@@ -185,25 +191,29 @@ def on_reaction(body, add):
     elif is_downvote(emoji):
         points = 100 * (-1 if add else 1)
     else:
-        return {}
+        return {"status": "Not the right emoji"}
 
     add_points(author_id, author_name, points)
 
-    return {}
+    return {"information": {
+        "user": author_name,
+        "id": author_id,
+        "points_added": points
+    }}
 
 
 def is_upvote(emoji):
     emoji_name = emoji.get("name")
     emoji_id = emoji.get("id")
 
-    return emoji_id == "755112940792840272" and emoji_name == "upvote"
+    return emoji_id == 755112940792840272 and emoji_name == "upvote"
 
 
 def is_downvote(emoji):
     emoji_name = emoji.get("name")
     emoji_id = emoji.get("id")
 
-    return emoji_id == "755112958916558959" and emoji_name == "downvote"
+    return emoji_id == 755112958916558959 and emoji_name == "downvote"
 
 
 def add_points(id, name, points):
