@@ -164,8 +164,8 @@ def scoreboard():
     users = get_users()
 
     for user in users:
-        name_field["value"] = name_field["value"] + user[1] + "\n"
-        points_field["value"] = points_field["value"] + user[2] + "\n"
+        name_field["value"] = name_field["value"] + str(user[1]) + "\n"
+        points_field["value"] = points_field["value"] + str(user[2]) + "\n"
 
     return {
         "type": RESPONSE_TYPES["MESSAGE_NO_SOURCE"],
