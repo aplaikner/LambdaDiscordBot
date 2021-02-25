@@ -157,6 +157,34 @@ def meme():
     }
 
 
+def scoreboard():
+    name_field = {"name": "Username", "value": "", "inline": True}
+    points_field = {"name": "Ehrenpunkte", "value": "", "inline": True}
+
+    users = get_users()
+
+    for user in users:
+        name_field["value"] = name_field["value"] + user[1] + "\n"
+        points_field["value"] = points_field["value"] + user[2] + "\n"
+
+    return {
+        "type": RESPONSE_TYPES["MESSAGE_NO_SOURCE"],
+        "data": {
+            "tts": False,
+            "content": "",
+            "embeds": [{
+                "color": 0x0099ff,
+                "title": "Scoreboard",
+                "fields": [
+                    name_field,
+                    points_field
+                ]
+            }],
+            "allowed_mentions": []
+        }
+    }
+
+
 def on_message(body):
     content = body.get("content")
 
@@ -274,6 +302,18 @@ def get_points_from_user(id):
     return result[0]
 
 
+def get_users():
+    conn = pymysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWORD, db=DB_NAME, connect_timeout=5)
+
+    with conn:
+        with conn.cursor() as cur:
+            sql = "SELECT id, name, points FROM Users order by points desc"
+            cur.execute(sql)
+            result = cur.fetchall()
+
+    return result
+
+
 def lambda_handler(event, context):
     # verify the signature
     try:
@@ -300,6 +340,9 @@ def lambda_handler(event, context):
 
     if body.get("data").get("name") == "dank":
         return meme()
+
+    if body.get("data").get("name") == "scoreboard":
+        return scoreboard()
 
     if body.get("data").get("name") == "message":
         return on_message(body)
