@@ -7,7 +7,7 @@
     * [Execution](#execution)
 3. [Features & Roadmap](#features--roadmap)
     * [Current Discord commands](#current-discord-commands)
-    * [HonorPoint](#honorpoints)
+    * [HonorPoints](#honorpoints)
     * [Listener](#listener)
     * [Planned](#planned)
 
