@@ -1,5 +1,6 @@
 1. [Introduction](#introduction)
 2. [Setup](#setup)
+    * [Important resources](#important-resources)
     * [Prerequisites](#prerequisites)
         * [Serverless](#serverless-python-dependencies)
         * [Server](#server-python-dependencies)
@@ -17,6 +18,13 @@ As the name suggests, this project is a Discord bot, based for the most part on 
 Python. Only functionalities that do not work serverless, because they need a listener, were outsourced to a server.
 
 # Setup
+
+## Important resources
+
+- Set up Lambda as a Discord bot API: https://oozio.medium.com/serverless-discord-bot-55f95f26f743
+- Deploy layers on AWS: https://docs.aws.amazon.com/lambda/latest/dg/python-package.html
+- Discord documentation to set up slash
+  commands: https://discord.com/developers/docs/interactions/slash-commands#registering-a-command
 
 ## Prerequisites
 
