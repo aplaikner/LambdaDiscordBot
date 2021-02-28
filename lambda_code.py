@@ -12,7 +12,7 @@ from nacl.exceptions import BadSignatureError
 keys = open('keys.json')
 keys_data = json.load(keys)
 
-PUBLIC_KEY_DISCORD = 'a826dbc40ee095cef951f027d10a13f0f3518424e6775ea82637cfebc2fc18f9'
+PUBLIC_KEY_DISCORD = keys_data["public_keys"]["discord"]
 PUBLIC_KEY_SERVER = "64fd9f9deda0129271cb035fdfe5501a79062c692436bf08bd63a99185b58ee2"
 
 R_CLIENT_ID = keys_data['reddit']['client_id']

@@ -8,14 +8,17 @@ import nacl.bindings
 import nacl.signing
 import nacl.encoding
 
-PRIVATE_KEY = "PRIVATE KEY"
+keys = open('keys.json')
+keys_data = json.load(keys)
 
-url = "ENDPOINT"
-token = "TOKEN"
+PRIVATE_KEY = keys_data["private_key"]
+
+url = keys_data["endpoint_url"]
+token = keys_data["bot_token"]
 client = discord.Client()
 
 
-def sendEvent(event, data):
+def send_event(event, data):
     body = json.dumps({
         "data": {
             "name": event
@@ -57,7 +60,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    sendEvent("message", {
+    send_event("message", {
         "author": {
             "name": message.author.name,
             "id": message.author.id
@@ -71,7 +74,7 @@ async def on_raw_reaction_add(reaction):
     channel = client.get_channel(reaction.channel_id)
     message = await channel.fetch_message(reaction.message_id)
 
-    sendEvent("reaction_add", {
+    send_event("reaction_add", {
         "message_author": {
             "name": message.author.name,
             "id": message.author.id
@@ -88,7 +91,7 @@ async def on_raw_reaction_remove(reaction):
     channel = client.get_channel(reaction.channel_id)
     message = await channel.fetch_message(reaction.message_id)
 
-    sendEvent("reaction_remove", {
+    send_event("reaction_remove", {
         "message_author": {
             "name": message.author.name,
             "id": message.author.id
