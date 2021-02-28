@@ -57,7 +57,7 @@ relevant login information from. It has the following format, you'll have to fil
     "user_agent": "REDDIT_USER_AGENT"
   },
   "endpoint_url": "SERVERLESS_FUNCTION_URL",
-  "bot_token": "NTU5NzQ1NDE2OTYzNDI0Mjc4.XJjlig.Up_G8OD12vpyTPLPxvIEHaqeDqc",
+  "bot_token": "BOT_TOKEN",
   "wolfram_id": "WOLFRAM_ID",
   "database": {
     "host": "DATABASE_HOSTNAME",
