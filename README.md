@@ -1,4 +1,7 @@
 1. [Introduction](#introduction)
+	* [Serverless Code](#serverless-code)
+	* [Discord and Server](#discord-and-server)
+	* [Backend](#backend)
 2. [Setup](#setup)
     * [Important resources](#important-resources)
     * [Prerequisites](#prerequisites)
@@ -11,11 +14,36 @@
     * [HonorPoints](#honorpoints)
     * [Listener](#listener)
     * [Planned](#planned)
+4. [Problems](#problems)
+5. [Conclusion](#conclusion)
 
 # Introduction
 
 As the name suggests, this project is a Discord bot, based for the most part on serverless functions and written in
 Python. Only functionalities that do not work serverless, because they need a listener, were outsourced to a server.
+
+## Implementation
+
+### Serverless Code
+
+The python code was deployed as a Lambda function on AWS. In order for the code to be called, a Rest API 
+endpoint had to be created. This endpoint points to the code, so when someone sends a post request to the url, the 
+code is called with the given parameters. 
+
+### Discord and Server
+
+In order for Discord to send events, the endpoint had to be specified at the Discord Developer Portal. For the server,
+a program had to be written that would connect to the bot, capture events, and send them to the endpoint.
+<br> 
+Since our lambda function should only process packets from Discord and our server, we check the signature of the packets.
+This way we can be sure that the request comes from someone trustworthy.  
+
+### Backend
+
+The server is used to handle events like when a user sends chat messages, adds reactions or removes reactions. 
+These are then sent directly to the function without further processing, so the server serves only as an interface.
+<br>
+The Lambda function contains all the functionality like sending a random meme or reading content from the database.
 
 # Setup
 
@@ -123,4 +151,12 @@ message is sent to the serverless function, that than accesses the database and 
 
 - Add more funny discord commands 
 
+# Problems
 
+There occurred some problems with the libraries during the setup of the Lambda function, but otherwise it went smoothly.
+
+# Conclusion
+
+It has to be said that there are better uses for serverless applications than for a bot, an example being database access.
+Nevertheless, the bot responded without any problems and did what it was supposed to do. However, if you want to program
+a Discord bot on your own, you should still use a server because it supports more functionalities.
